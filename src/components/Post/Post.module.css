@@ -1,0 +1,135 @@
+.comment {
+    border-radius: 12px;
+    padding: 20px;
+    background-color: white;
+    margin-bottom: 10px;
+    max-width: var(--max-width);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.caption {
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+}
+
+.avatar {
+    width: 48px;
+    height: auto;
+}
+
+.username {
+    font-weight: 700;
+    color: var(--dark-blue);
+}
+
+.text,
+.date {
+    color: var(--grayish-blue);
+}
+
+.text {
+    line-height: 1.5;
+}
+
+.button {
+    display: flex;
+    column-gap: 5px;
+    color: var(--moderate-blue);
+    font-weight: 600;
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+
+
+.editButton:hover,
+.replyButton:hover {
+    color: var(--light-grayish-blue);
+}
+
+.editButton:hover path,
+.replyButton:hover path {
+    fill: var(--light-grayish-blue);
+}
+
+.raiting {
+    display: flex;
+}
+
+.raitingButton {
+    --radius: 7px;
+    width: 1.5rem;
+    cursor: pointer;
+    color: var(--light-grayish-blue);
+}
+
+.raitingValue {
+    outline: none;
+    text-align: center;
+    width: 3rem;
+    color: var(--moderate-blue);
+}
+
+.raitingButton,
+.raitingValue {
+    background-color: var(--light-gray);
+    border: 1px solid var(--light-gray);
+    font-weight: 600;
+    line-height: 2;
+}
+
+.raitingButtonPlus {
+    border-right: none;
+    border-top-left-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
+}
+
+.raitingButtonMinus {
+    border-left: none;
+    border-top-right-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+}
+
+.raitingButtonMinus:hover,
+.raitingButtonPlus:hover {
+    color: var(--moderate-blue);
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.auth {
+    padding: 5px 10px;
+    font-weight: 600;
+    color: white;
+    background-color: var(--moderate-blue);
+    border-radius: 2px;
+}
+
+.deleteButton {
+    color: var(--soft-red);
+}
+
+.deleteButton:hover {
+    color: var(--pale-red);
+}
+
+.deleteButton:hover path {
+    fill: var(--pale-red);
+}
+
+.replyingTo {
+    font-weight: 600;
+    color: var(--moderate-blue);
+}
+
+.reply {
+    margin-left: 10px;
+    /* border-left: 1px solid silver; */
+}

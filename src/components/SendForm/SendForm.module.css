@@ -1,0 +1,38 @@
+.form {
+    border-radius: 12px;
+    padding: 20px;
+    background-color: white;
+    max-width: var(--max-width);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.avatar {
+    width: 48px;
+    height: auto;
+}
+
+.textarea {
+    resize: none;
+    width: 100%;
+    margin-bottom: 10px;
+    border: 1px solid var(--light-gray);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.sendButton {
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 20px;
+    color: white;
+    background-color: var(--moderate-blue);
+    text-transform: uppercase;
+}
