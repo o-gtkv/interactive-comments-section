@@ -19,15 +19,6 @@ function Caption({ username, image, createdAt, isAuth }) {
     )
 }
 
-function ReplyButton({ onClick }) {
-    return (
-        <button className={cn(styles.button, styles.replyButton)} onClick={onClick}>
-            <svg width="14" height="13" xmlns="http://www.w3.org/2000/svg"><path d="M.227 4.316 5.04.16a.657.657 0 0 1 1.085.497v2.189c4.392.05 7.875.93 7.875 5.093 0 1.68-1.082 3.344-2.279 4.214-.373.272-.905-.07-.767-.51 1.24-3.964-.588-5.017-4.829-5.078v2.404c0 .566-.664.86-1.085.496L.227 5.31a.657.657 0 0 1 0-.993Z" fill="#5357B6" /></svg>
-            Reply
-        </button>
-    )
-}
-
 function Raiting({ value = 0 }) {
     const [raiting, setRaiting] = useState(value)
 
@@ -71,20 +62,13 @@ function EditButton({ onClick }) {
     )
 }
 
-function findPostAndDel(comments, id) {
-    for (let i = 0; i < comments.length; ++i) {
-        if (comments[i].id === id) {
-            comments.splice(i, 1)
-            return true
-        }
-        for (let j = 0; j < comments[i].replies.length; ++j) {
-            if (comments[i].replies[j].id === id) {
-                comments[i].replies.splice(j, 1)
-                return true
-            }
-        }
-    }
-    return false
+function ReplyButton({ onClick }) {
+    return (
+        <button className={cn(styles.button, styles.replyButton)} onClick={onClick}>
+            <svg width="14" height="13" xmlns="http://www.w3.org/2000/svg"><path d="M.227 4.316 5.04.16a.657.657 0 0 1 1.085.497v2.189c4.392.05 7.875.93 7.875 5.093 0 1.68-1.082 3.344-2.279 4.214-.373.272-.905-.07-.767-.51 1.24-3.964-.588-5.017-4.829-5.078v2.404c0 .566-.664.86-1.085.496L.227 5.31a.657.657 0 0 1 0-.993Z" fill="#5357B6" /></svg>
+            Reply
+        </button>
+    )
 }
 
 function Post({ id, username, image, createdAt, text, raiting, replyingTo, replyingToPostId = null, isAuth = false }) {
@@ -102,13 +86,15 @@ function Post({ id, username, image, createdAt, text, raiting, replyingTo, reply
     }
 
     const handleDeleteButtonClick = () => {
-        const comments = _.cloneDeep(state) // deep copy all the state (which contents only the comments list)
-        findPostAndDel(comments, id)        // find and delete the post with the "id"
         dispatch({                          // update the state with new one
             type: "DELETE_POST",
-            comments: comments
+            id
         })
 
+    }
+
+    const closeReplyWindow = () => {
+        setReplyIsActive(false)
     }
 
     return (
@@ -138,7 +124,7 @@ function Post({ id, username, image, createdAt, text, raiting, replyingTo, reply
                 </div>
             </div>
             {
-                replyIsActive ? <ReplyForm image={currentUser.image.png} /> : null
+                replyIsActive ? <ReplyForm replyingToId={id} replyingToUsername={username} closeReplyWindow={closeReplyWindow} /> : null
             }
         </>
     )

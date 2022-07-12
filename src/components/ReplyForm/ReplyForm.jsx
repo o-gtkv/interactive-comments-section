@@ -1,16 +1,40 @@
-import React from 'react'
+import React, { useRef, useContext } from 'react'
 import cn from 'classnames'
+import { UserContext } from '../../context/userContext'
+import { useSelector, useDispatch } from 'react-redux'
+import _ from 'lodash'
 import styles from './ReplyForm.module.css'
 
-function ReplyForm({ image }) {
-    const handleReplyButtonClick = () => {
+let newId = 50
 
+function ReplyForm({ replyingToId, replyingToUsername, closeReplyWindow }) {
+    const dispatch = useDispatch()
+    const currentUser = useContext(UserContext)
+    const textareaEl = useRef(null)
+
+    const handleReplyButtonClick = () => {
+        dispatch({
+            type: 'ADD_REPLY',
+            payload: {
+                id: replyingToId,
+                newPost: {
+                    id: newId++,
+                    content: textareaEl.current.value,
+                    createdAt: 'now',
+                    score: 0,
+                    replyingTo: replyingToUsername,
+                    user: _.cloneDeep(currentUser)
+                }
+            }
+        })
+        textareaEl.current.value = ''
+        closeReplyWindow()
     }
 
     return (
         <form className={cn(styles.form)}>
-            <img className={cn(styles.avatar)} src={image} alt="avatar" />
-            <textarea className={cn(styles.textarea)} rows="3" placeholder="Add a comment..."></textarea>
+            <img className={cn(styles.avatar)} src={currentUser.image.png} alt="avatar" />
+            <textarea className={cn(styles.textarea)} rows="3" placeholder="Add a comment..." ref={textareaEl}></textarea>
             <button className={cn(styles.replyButton)} type="button" onClick={handleReplyButtonClick}>reply</button>
         </form>
     )

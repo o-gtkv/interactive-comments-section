@@ -13,17 +13,16 @@ function SendForm({ image }) {
     const textareaEl = useRef(null)
 
     const handleSendButtonClick = () => {
-        const newPost = {
-            id: newId++,
-            content: textareaEl.current.value,
-            createdAt: "now",
-            score: 0,
-            replies: [],
-            user: _.cloneDeep(currentUser)
-        }
         dispatch({
-            type: "ADD_POST",
-            newPost
+            type: 'ADD_POST',
+            newPost: {
+                id: newId++,
+                content: textareaEl.current.value,
+                createdAt: 'now',
+                score: 0,
+                replies: [],
+                user: _.cloneDeep(currentUser)
+            }
         })
         textareaEl.current.value = ''
     }
