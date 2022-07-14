@@ -21,11 +21,12 @@
 
 .username {
     font-weight: 700;
+    /* font-size: calc(0.5em + 1vw); */
     color: var(--dark-blue);
 }
 
 .text,
-.date {
+.createdAt {
     color: var(--grayish-blue);
 }
 
@@ -132,4 +133,39 @@
 .reply {
     margin-left: 10px;
     /* border-left: 1px solid silver; */
+}
+
+.editForm {
+    /* display: flex;
+    column-gap: 10px;
+    align-items: flex-start; */
+    text-align: right;
+    margin: 10px;
+}
+
+.textarea {
+    resize: none;
+    width: 100%;
+    margin-bottom: 10px;
+    border: 1px solid var(--light-gray);
+    border-radius: 12px;
+    padding: 20px;
+    flex: 1;
+}
+
+.updateButton {
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 20px;
+    color: white;
+    background-color: var(--moderate-blue);
+    text-transform: uppercase;
+
+}
+
+@media (max-width: 400px) {
+    .createdAt {
+        font-size: 0.7em;
+    }
 }

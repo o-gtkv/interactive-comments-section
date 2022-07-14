@@ -34,6 +34,29 @@ function findAndAddReply(comments, id, newPost) {
     }
 }
 
+function findAndUpdate(comments, id, text) {
+    for (let i = 0; i < comments.length; ++i) {
+        if (comments[i].id === id) {
+            comments[i].content = text
+            return
+        }
+        // search in the replies to the post
+        for (let j = 0; j < comments[i].replies.length; ++j) {
+            if (comments[i].replies[j].id === id) {
+                comments[i].replies[j].content = text
+                return
+            }
+        }
+    }
+}
+
+function updatePost(state, action) {
+    const comments = _.cloneDeep(state)
+    const { id, text } = action.payload
+    findAndUpdate(comments, id, text)
+    return comments
+}
+
 export function postReducer(state = {}, action) {
     let comments = null
     switch (action.type) {
@@ -48,6 +71,8 @@ export function postReducer(state = {}, action) {
             const { id, newPost } = action.payload
             findAndAddReply(comments, id, newPost)
             return comments
+        case 'UPDATE_POST':
+            return updatePost(state, action)
         default:
             return state
     }

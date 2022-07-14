@@ -1,9 +1,9 @@
 import cn from 'classnames'
-import { useContext, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useState, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import ReplyForm from '../ReplyForm/ReplyForm'
-import { UserContext } from '../../context/userContext'
-import _ from 'lodash'
+// import { UserContext } from '../../context/userContext'
+// import _ from 'lodash'
 import styles from './Post.module.css'
 
 function Caption({ username, image, createdAt, isAuth }) {
@@ -71,23 +71,47 @@ function ReplyButton({ onClick }) {
     )
 }
 
+function EditForm({ id, closeUpdateForm }) {
+    const textareaEl = useRef(null)
+    const dispatch = useDispatch()
+
+    const handleUpdateButtonClick = () => {
+        dispatch({
+            type: 'UPDATE_POST',
+            payload: {
+                text: textareaEl.current.value,
+                id
+            }
+        })
+        closeUpdateForm()
+    }
+
+    return (
+        <form className={cn(styles.editForm)}>
+            <textarea className={cn(styles.textarea)} name="" id="" cols="30" rows="3" ref={textareaEl}></textarea>
+            <button className={cn(styles.updateButton)} type="button" onClick={handleUpdateButtonClick}>Update</button>
+        </form >
+    )
+}
+
 function Post({ id, username, image, createdAt, text, raiting, replyingTo, replyingToPostId = null, isAuth = false }) {
-    const state = useSelector(state => state)
-    const currentUser = useContext(UserContext)
+    // const state = useSelector(state => state)
+    // const currentUser = useContext(UserContext)
     const [replyIsActive, setReplyIsActive] = useState(false)
     const dispatch = useDispatch()
+    const [editIsActive, setEditIsActive] = useState(false)
+
+    const handleEditButtonClick = () => {
+        setEditIsActive(!editIsActive)
+    }
 
     const handleReplyButtonOnClick = () => {
         setReplyIsActive(!replyIsActive)
     }
 
-    const handleEditButtonClick = () => {
-        console.log('clicked edit');
-    }
-
     const handleDeleteButtonClick = () => {
         dispatch({                          // update the state with new one
-            type: "DELETE_POST",
+            type: 'DELETE_POST',
             id
         })
 
@@ -97,19 +121,28 @@ function Post({ id, username, image, createdAt, text, raiting, replyingTo, reply
         setReplyIsActive(false)
     }
 
+    const closeUpdateForm = () => {
+        setEditIsActive(!editIsActive)
+    }
+
     return (
         <>
             <div className={cn(styles.comment)}>
                 <Caption username={username} image={image} createdAt={createdAt} isAuth={isAuth} />
-                <p className={cn(styles.text)}>
-                    {
-                        replyingTo ?
-                            <span className={cn(styles.replyingTo)}>{`@${replyingTo} `}</span>
-                            :
-                            null
-                    }
-                    {text}
-                </p>
+                {
+                    editIsActive ?
+                        <EditForm id={id} closeUpdateForm={closeUpdateForm} />
+                        :
+                        <p className={cn(styles.text)}>
+                            {
+                                replyingTo ?
+                                    <span className={cn(styles.replyingTo)}>{`@${replyingTo} `}</span>
+                                    :
+                                    null
+                            }
+                            {text}
+                        </p>
+                }
                 <div className={cn(styles.footer)}>
                     <Raiting value={raiting} />
                     {
