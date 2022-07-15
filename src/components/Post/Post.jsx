@@ -2,6 +2,7 @@ import cn from 'classnames'
 import { useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import ReplyForm from '../ReplyForm/ReplyForm'
+import DeleteWarningForm from './DeleteWarningForm/DeleteWarningForm'
 // import { UserContext } from '../../context/userContext'
 // import _ from 'lodash'
 import styles from './Post.module.css'
@@ -95,11 +96,10 @@ function EditForm({ id, closeUpdateForm }) {
 }
 
 function Post({ id, username, image, createdAt, text, raiting, replyingTo, replyingToPostId = null, isAuth = false }) {
-    // const state = useSelector(state => state)
-    // const currentUser = useContext(UserContext)
     const [replyIsActive, setReplyIsActive] = useState(false)
     const dispatch = useDispatch()
     const [editIsActive, setEditIsActive] = useState(false)
+    const [deleteIsActive, setDeleteIsActive] = useState(false)
 
     const handleEditButtonClick = () => {
         setEditIsActive(!editIsActive)
@@ -110,14 +110,16 @@ function Post({ id, username, image, createdAt, text, raiting, replyingTo, reply
     }
 
     const handleDeleteButtonClick = () => {
-        dispatch({                          // update the state with new one
-            type: 'DELETE_POST',
-            id
-        })
-
+        // dispatch({                          // update the state with new one
+        //     type: 'DELETE_POST',
+        //     payload: {
+        //         id
+        //     }
+        // })
+        setDeleteIsActive(true)
     }
 
-    const closeReplyWindow = () => {
+    const closeReplyForm = () => {
         setReplyIsActive(false)
     }
 
@@ -157,7 +159,23 @@ function Post({ id, username, image, createdAt, text, raiting, replyingTo, reply
                 </div>
             </div>
             {
-                replyIsActive ? <ReplyForm replyingToId={id} replyingToUsername={username} closeReplyWindow={closeReplyWindow} /> : null
+                replyIsActive ? <ReplyForm replyingToId={id} replyingToUsername={username} closeReplyForm={closeReplyForm} /> : null
+            }
+            {
+                deleteIsActive ?
+                    <DeleteWarningForm
+                        onCancel={() => setDeleteIsActive(false)}
+                        onDelete={() => {
+                            dispatch({
+                                type: 'DELETE_POST',
+                                payload: {
+                                    id
+                                }
+                            })
+                        }}
+                    />
+                    :
+                    null
             }
         </>
     )

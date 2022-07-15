@@ -1,13 +1,13 @@
 import React, { useRef, useContext } from 'react'
 import cn from 'classnames'
 import { UserContext } from '../../context/userContext'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import _ from 'lodash'
 import styles from './ReplyForm.module.css'
 
 let newId = 50
 
-function ReplyForm({ replyingToId, replyingToUsername, closeReplyWindow }) {
+function ReplyForm({ replyingToId, replyingToUsername, closeReplyForm }) {
     const dispatch = useDispatch()
     const currentUser = useContext(UserContext)
     const textareaEl = useRef(null)
@@ -28,9 +28,8 @@ function ReplyForm({ replyingToId, replyingToUsername, closeReplyWindow }) {
             }
         })
         textareaEl.current.value = ''
-        closeReplyWindow()
+        closeReplyForm()
     }
-
     return (
         <form className={cn(styles.form)}>
             <img className={cn(styles.avatar)} src={currentUser.image.png} alt="avatar" />

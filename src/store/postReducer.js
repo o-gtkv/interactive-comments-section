@@ -57,20 +57,27 @@ function updatePost(state, action) {
     return comments
 }
 
+function addReply(state, action) {
+    const comments = _.cloneDeep(state)
+    const { id, newPost } = action.payload
+    findAndAddReply(comments, id, newPost)
+    return comments
+}
+
+function deletePost(state, action) {
+    const comments = _.cloneDeep(state)         // deep copy all the state (which contents only the comments list)
+    findPostAndDel(comments, action.payload.id) // find and delete the post with the "id"
+    return comments                             // return new state
+}
+
 export function postReducer(state = {}, action) {
-    let comments = null
     switch (action.type) {
         case 'ADD_POST':
-            return [...state, action.newPost]
+            return [...state, action.payload.newPost]
         case 'DELETE_POST':
-            comments = _.cloneDeep(state)       // deep copy all the state (which contents only the comments list)
-            findPostAndDel(comments, action.id) // find and delete the post with the "id"
-            return comments                     // return new state
+            return deletePost(state, action)
         case 'ADD_REPLY':
-            comments = _.cloneDeep(state)
-            const { id, newPost } = action.payload
-            findAndAddReply(comments, id, newPost)
-            return comments
+            return addReply(state, action)
         case 'UPDATE_POST':
             return updatePost(state, action)
         default:

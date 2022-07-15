@@ -1,6 +1,6 @@
 import React, { useRef, useContext } from 'react'
 import cn from 'classnames'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { UserContext } from '../../context/userContext'
 import _ from 'lodash'
 import styles from './SendForm.module.css'
@@ -15,13 +15,15 @@ function SendForm({ image }) {
     const handleSendButtonClick = () => {
         dispatch({
             type: 'ADD_POST',
-            newPost: {
-                id: newId++,
-                content: textareaEl.current.value,
-                createdAt: 'now',
-                score: 0,
-                replies: [],
-                user: _.cloneDeep(currentUser)
+            payload: {
+                newPost: {
+                    id: newId++,
+                    content: textareaEl.current.value,
+                    createdAt: 'now',
+                    score: 0,
+                    replies: [],
+                    user: _.cloneDeep(currentUser)
+                }
             }
         })
         textareaEl.current.value = ''
