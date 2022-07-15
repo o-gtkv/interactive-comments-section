@@ -20,7 +20,7 @@ function Caption({ username, image, createdAt, isAuth }) {
     )
 }
 
-function Raiting({ value = 0 }) {
+function Raiting({ value = 0, disabled = false }) {
     const [raiting, setRaiting] = useState(value)
 
     const handleMinusClick = () => {
@@ -33,14 +33,14 @@ function Raiting({ value = 0 }) {
 
     return (
         <div className={cn(styles.raiting)}>
-            <button className={cn(styles.raitingButton, styles.raitingButtonPlus)} onClick={handlePlusClick} >+</button>
+            <button className={cn(styles.raitingButton, styles.raitingButtonPlus)} onClick={handlePlusClick} disabled={disabled} >+</button>
             <input
                 className={cn(styles.raitingValue)}
                 type="text"
                 value={raiting}
                 disabled
             />
-            <button className={cn(styles.raitingButton, styles.raitingButtonMinus)} onClick={handleMinusClick}>-</button>
+            <button className={cn(styles.raitingButton, styles.raitingButtonMinus)} onClick={handleMinusClick} disabled={disabled}>-</button>
         </div>
     )
 }
@@ -110,12 +110,6 @@ function Post({ id, username, image, createdAt, text, raiting, replyingTo, reply
     }
 
     const handleDeleteButtonClick = () => {
-        // dispatch({                          // update the state with new one
-        //     type: 'DELETE_POST',
-        //     payload: {
-        //         id
-        //     }
-        // })
         setDeleteIsActive(true)
     }
 
@@ -146,7 +140,7 @@ function Post({ id, username, image, createdAt, text, raiting, replyingTo, reply
                         </p>
                 }
                 <div className={cn(styles.footer)}>
-                    <Raiting value={raiting} />
+                    <Raiting value={raiting} disabled={isAuth} />
                     {
                         isAuth ?
                             <div style={{ display: 'flex' }}>
