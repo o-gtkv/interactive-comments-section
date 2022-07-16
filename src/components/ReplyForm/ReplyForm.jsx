@@ -3,11 +3,10 @@ import cn from 'classnames'
 import { UserContext } from '../../context/userContext'
 import { useDispatch } from 'react-redux'
 import _ from 'lodash'
+import { newId } from '../../util'
 import styles from './ReplyForm.module.css'
 
-let newId = 50
-
-function ReplyForm({ replyingToId, replyingToUsername, closeReplyForm }) {
+function ReplyForm({ replyingToId, replyingToUsername, onReplyButtonClick }) {
     const dispatch = useDispatch()
     const currentUser = useContext(UserContext)
     const textareaEl = useRef(null)
@@ -18,7 +17,7 @@ function ReplyForm({ replyingToId, replyingToUsername, closeReplyForm }) {
             payload: {
                 id: replyingToId,
                 newPost: {
-                    id: newId++,
+                    id: newId(),
                     content: textareaEl.current.value,
                     createdAt: 'now',
                     score: 0,
@@ -28,7 +27,7 @@ function ReplyForm({ replyingToId, replyingToUsername, closeReplyForm }) {
             }
         })
         textareaEl.current.value = ''
-        closeReplyForm()
+        onReplyButtonClick()
     }
     return (
         <form className={cn(styles.form)}>

@@ -3,9 +3,8 @@ import cn from 'classnames'
 import { useDispatch } from 'react-redux'
 import { UserContext } from '../../context/userContext'
 import _ from 'lodash'
+import { newId } from '../../util'
 import styles from './SendForm.module.css'
-
-let newId = 10
 
 function SendForm({ image }) {
     const dispatch = useDispatch()
@@ -17,7 +16,7 @@ function SendForm({ image }) {
             type: 'ADD_POST',
             payload: {
                 newPost: {
-                    id: newId++,
+                    id: newId(),
                     content: textareaEl.current.value,
                     createdAt: 'now',
                     score: 0,

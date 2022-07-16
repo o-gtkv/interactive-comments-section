@@ -40,7 +40,6 @@ function PostList() {
                                                 text={reply.content}
                                                 raiting={reply.score}
                                                 replyingTo={reply.replyingTo}
-                                                replyingToPostId={comment.id}
                                                 isAuth={currentUser.username === reply.user.username}
                                             />
                                         )

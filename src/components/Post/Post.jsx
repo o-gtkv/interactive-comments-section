@@ -3,33 +3,13 @@ import { useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import ReplyForm from '../ReplyForm/ReplyForm'
 import DeleteWarningForm from './DeleteWarningForm/DeleteWarningForm'
-// import { UserContext } from '../../context/userContext'
-// import _ from 'lodash'
+import Media from 'react-media'
 import styles from './Post.module.css'
-
-function Caption({ username, image, createdAt, isAuth }) {
-    return (
-        <div className={cn(styles.caption)}>
-            <img className={cn(styles.avatar)} src={image} alt={`${username}'s avatar`} />
-            <span className={cn(styles.username)}>{username}</span>
-            {
-                isAuth ? <div className={cn(styles.auth)}>you</div> : null
-            }
-            <span className={cn(styles.createdAt)}>{createdAt}</span>
-        </div >
-    )
-}
 
 function Raiting({ value = 0, disabled = false }) {
     const [raiting, setRaiting] = useState(value)
-
-    const handleMinusClick = () => {
-        setRaiting(raiting - 1)
-    }
-
-    const handlePlusClick = () => {
-        setRaiting(raiting + 1)
-    }
+    const handleMinusClick = () => setRaiting(raiting - 1)
+    const handlePlusClick = () => setRaiting(raiting + 1)
 
     return (
         <div className={cn(styles.raiting)}>
@@ -72,7 +52,7 @@ function ReplyButton({ onClick }) {
     )
 }
 
-function EditForm({ id, closeUpdateForm }) {
+function EditForm({ id, onUpdateButtonClick }) {
     const textareaEl = useRef(null)
     const dispatch = useDispatch()
 
@@ -84,7 +64,7 @@ function EditForm({ id, closeUpdateForm }) {
                 id
             }
         })
-        closeUpdateForm()
+        onUpdateButtonClick()
     }
 
     return (
@@ -95,65 +75,84 @@ function EditForm({ id, closeUpdateForm }) {
     )
 }
 
-function Post({ id, username, image, createdAt, text, raiting, replyingTo, replyingToPostId = null, isAuth = false }) {
+function Post({ id, username, image, createdAt, text, raiting, replyingTo, isAuth = false }) {
     const [replyIsActive, setReplyIsActive] = useState(false)
     const dispatch = useDispatch()
     const [editIsActive, setEditIsActive] = useState(false)
     const [deleteIsActive, setDeleteIsActive] = useState(false)
 
-    const handleEditButtonClick = () => {
-        setEditIsActive(!editIsActive)
-    }
-
-    const handleReplyButtonOnClick = () => {
-        setReplyIsActive(!replyIsActive)
-    }
-
-    const handleDeleteButtonClick = () => {
-        setDeleteIsActive(true)
-    }
-
-    const closeReplyForm = () => {
-        setReplyIsActive(false)
-    }
-
-    const closeUpdateForm = () => {
-        setEditIsActive(!editIsActive)
-    }
+    const handleEditButtonClick = () => setEditIsActive(!editIsActive)
+    const handleReplyButtonOnClick = () => setReplyIsActive(!replyIsActive)
+    const handleDeleteButtonClick = () => setDeleteIsActive(true)
 
     return (
         <>
             <div className={cn(styles.comment)}>
-                <Caption username={username} image={image} createdAt={createdAt} isAuth={isAuth} />
+                <div className={cn(styles.caption)}>
+                    <img className={cn(styles.avatar)} src={image} alt={`${username}'s avatar`} />
+                    <span className={cn(styles.username)}>{username}</span>
+                    {
+                        isAuth ? <div className={cn(styles.auth)}>you</div> : null
+                    }
+                    <span className={cn(styles.createdAt)}>{createdAt}</span>
+                    <Media query="(min-width: 501px)" render={() =>
+                    (
+                        <>
+                            {
+                                isAuth ?
+                                    <div className={cn(styles.utilButtons)}>
+                                        <DeleteButton onClick={handleDeleteButtonClick} />
+                                        <EditButton onClick={handleEditButtonClick} />
+                                    </div>
+                                    :
+                                    <ReplyButton onClick={handleReplyButtonOnClick}>Reply</ReplyButton>
+                            }
+                        </>
+                    )}
+                    />
+                </div >
                 {
                     editIsActive ?
-                        <EditForm id={id} closeUpdateForm={closeUpdateForm} />
+                        <EditForm
+                            id={id}
+                            onUpdateButtonClick={() => setEditIsActive(!editIsActive)}
+                        />
                         :
                         <p className={cn(styles.text)}>
                             {
-                                replyingTo ?
-                                    <span className={cn(styles.replyingTo)}>{`@${replyingTo} `}</span>
-                                    :
-                                    null
+                                replyingTo ? <span className={cn(styles.replyingTo)}>{`@${replyingTo} `}</span> : null
                             }
                             {text}
                         </p>
                 }
                 <div className={cn(styles.footer)}>
                     <Raiting value={raiting} disabled={isAuth} />
-                    {
-                        isAuth ?
-                            <div style={{ display: 'flex' }}>
-                                <DeleteButton onClick={handleDeleteButtonClick} />
-                                <EditButton onClick={handleEditButtonClick} />
-                            </div>
-                            :
-                            <ReplyButton onClick={handleReplyButtonOnClick}>Reply</ReplyButton>
-                    }
+                    <Media query="(max-width: 500px)" render={() =>
+                    (
+                        <>
+                            {
+                                isAuth ?
+                                    <div className={cn(styles.utilButtons)}>
+                                        <DeleteButton onClick={handleDeleteButtonClick} />
+                                        <EditButton onClick={handleEditButtonClick} />
+                                    </div>
+                                    :
+                                    <ReplyButton onClick={handleReplyButtonOnClick}>Reply</ReplyButton>
+                            }
+                        </>
+                    )}
+                    />
                 </div>
             </div>
             {
-                replyIsActive ? <ReplyForm replyingToId={id} replyingToUsername={username} closeReplyForm={closeReplyForm} /> : null
+                replyIsActive ?
+                    <ReplyForm
+                        replyingToId={id}
+                        replyingToUsername={username}
+                        onReplyButtonClick={() => setReplyIsActive(false)}
+                    />
+                    :
+                    null
             }
             {
                 deleteIsActive ?
