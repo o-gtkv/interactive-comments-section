@@ -113,10 +113,7 @@ function Post({ id, username, image, createdAt, text, raiting, replyingTo, isAut
                 </div >
                 {
                     editIsActive ?
-                        <EditForm
-                            id={id}
-                            onUpdateButtonClick={() => setEditIsActive(!editIsActive)}
-                        />
+                        <EditForm id={id} onUpdateButtonClick={() => setEditIsActive(!editIsActive)} />
                         :
                         <p className={cn(styles.text)}>
                             {
@@ -146,11 +143,7 @@ function Post({ id, username, image, createdAt, text, raiting, replyingTo, isAut
             </div>
             {
                 replyIsActive ?
-                    <ReplyForm
-                        replyingToId={id}
-                        replyingToUsername={username}
-                        onReplyButtonClick={() => setReplyIsActive(false)}
-                    />
+                    <ReplyForm replyingToId={id} replyingToUsername={username} onReplyButtonClick={() => setReplyIsActive(false)} />
                     :
                     null
             }
