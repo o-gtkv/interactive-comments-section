@@ -52,7 +52,7 @@ function ReplyButton({ onClick }) {
     )
 }
 
-function EditForm({ id, onUpdateButtonClick }) {
+function EditForm({ id, content, onUpdateButtonClick }) {
     const textareaEl = useRef(null)
     const dispatch = useDispatch()
 
@@ -69,7 +69,7 @@ function EditForm({ id, onUpdateButtonClick }) {
 
     return (
         <form className={cn(styles.editForm)}>
-            <textarea className={cn(styles.textarea)} name="" id="" cols="30" rows="3" ref={textareaEl}></textarea>
+            <textarea className={cn(styles.textarea)} name="" id="" cols="30" rows="3" ref={textareaEl}>{content}</textarea>
             <button className={cn(styles.updateButton)} type="button" onClick={handleUpdateButtonClick}>Update</button>
         </form >
     )
@@ -80,6 +80,7 @@ function Post({ id, username, image, createdAt, text, raiting, replyingTo, isAut
     const dispatch = useDispatch()
     const [editIsActive, setEditIsActive] = useState(false)
     const [deleteIsActive, setDeleteIsActive] = useState(false)
+    const contentRef = useRef(null)
 
     const handleEditButtonClick = () => setEditIsActive(!editIsActive)
     const handleReplyButtonOnClick = () => setReplyIsActive(!replyIsActive)
@@ -113,13 +114,13 @@ function Post({ id, username, image, createdAt, text, raiting, replyingTo, isAut
                 </div >
                 {
                     editIsActive ?
-                        <EditForm id={id} onUpdateButtonClick={() => setEditIsActive(!editIsActive)} />
+                        <EditForm id={id} content={contentRef.current.innerText} onUpdateButtonClick={() => setEditIsActive(!editIsActive)} />
                         :
                         <p className={cn(styles.text)}>
                             {
                                 replyingTo ? <span className={cn(styles.replyingTo)}>{`@${replyingTo} `}</span> : null
                             }
-                            {text}
+                            <span ref={contentRef}>{text}</span>
                         </p>
                 }
                 <div className={cn(styles.footer)}>
